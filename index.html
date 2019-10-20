@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html style="background: #223">
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"
+    />
+  </head>
+  <style>
+    p {
+      margin-bottom: 1em;
+      color: #a9cbff;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 50%);
+    }
+    br {
+      margin-bottom: 0.5em;
+    }
+  </style>
+  <body class="container">
+    <div class="is-marginless has-text-centered">
+      <h1 class="title is-1" style="color:#fff">Verkefni 2</h1>
+    </div>
+    <div class="section">
+      <h2 class="subtitle is-3" style="color:#fff">Hísing</h2>
+      <p class="section">
+        Þessi síða er hostuð á nafn. Við erum að nota docker fyrir að keyra
+        container. Texta um conteinarinn
+      </p>
+
+      <h2 class="subtitle is-3" style="color:#fff">Vinnuflæði</h2>
+      <div class="section grid">
+        <div>
+          <h3 class="subtitle is-4" style="color:#fff">Tender</h3>
+          <p>
+            Í tender hlutanum erum við að reina að fylgja gitflow vinnuflæðinu.
+            Okkur leist best á það fyrir þennan hluta.
+            <br />
+            En við erum samt ekki byrjaðir að fylgja því, ástaðan er sú að
+            Róbert er búinn að sjá um þennan hluta einn hingað til. Hann er
+            búinn að vinna í 2 branch-um api og client.
+            <br />
+            Api branch-ið var bara fyrir að búa til API server sem virkaði, svo
+            var öll vinnan gerð á client brancch-inu. Ástaðan var sú að það var
+            þægilega að vara á sama branch-i, maður þurfti ekki að fara á api
+            branch-ið bara til að bæta við smá kóða. En svona Vinnuflæði virkaði
+            bara út af Róbert var bara einn að pull-a og push-a.
+            <br />
+
+            Núna mun þetta breytast því Pétur er kominn í þennan hluta. Planið
+            er að reina að fylgja gitflow vinnuflæðinu. Vera með Master sem
+            heldur utan um síðuna sem notendur sjá, developer branch fyrir
+            developmen og svo branch frá því fyrir Featur.
+          </p>
+        </div>
+        <div style="margin: auto">
+          <div class="has-text-centered" id="graph"></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3 class="subtitle is-4" style="color:#ffff">Web</h3>
+        <div class="grid">
+          <div>
+            <p>
+              Við völdum allt annað Vinnuflæði fyrir web hlutann. Ástaðan var sú
+              að web hlutinn var aðalega design með smá cms. Kypler er búinn að
+              sjá mest um web hlutann og er búinn að vera vinna í honum beint á
+              fartölvunni sinni. Hann er samt núna búinn að færa hann á github.
+              <br />
+              Vinnuflæði í þessum hluta er frekar lítið við erum með eitt master
+              branch sem heldur utan um síðuna sem er live. Client branch fyrir
+              alla design og virkni vinnu og svo cms branch sem sér um vinnslu á
+              cms-inum.
+            </p>
+          </div>
+          <div>
+            <div class="has-text-centered" id="web"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@gitgraph/js"></script>
+    <script>
+      const graphContainer = document.getElementById("graph");
+
+      const gitgraph = GitgraphJS.createGitgraph(graphContainer, {
+        orientation: "horizontal"
+      });
+
+      const master = gitgraph.branch("master");
+      master.commit("Initial commit");
+
+      const develop = gitgraph.branch("develop");
+      develop.commit("Add TypeScript");
+
+      const aFeature = gitgraph.branch("a-feature");
+      aFeature
+        .commit("Make it work")
+        .commit({ subject: "Make it right", hash: "test" })
+        .commit("Make it fast");
+
+      develop.merge(aFeature);
+      develop.commit("Prepare v1");
+
+      master.merge(develop).tag("v1.0.0");
+    </script>
+    <script>
+      const webGraphContainer = document.getElementById("web");
+
+      const webGitgraph = GitgraphJS.createGitgraph(webGraphContainer, {
+        orientation: "horizontal"
+      });
+      const client = webGitgraph.branch("Client");
+      client.commit("Desktop design");
+
+      const webMaster = webGitgraph.branch("master");
+      webMaster.commit("Version 0.1");
+
+      const cms = webGitgraph.branch("CMS");
+      cms.commit("Add TypeScript");
+
+      webMaster.merge(cms);
+
+      client.commit("Mobile design");
+
+      webMaster.merge(client);
+    </script>
+  </body>
+</html>
